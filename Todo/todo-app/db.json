@@ -1,3 +1,9 @@
 {
-  "todosList":[]
+  "todosDB": [
+    {
+      "id": 1,
+      "todoTask": "hello",
+      "completed": false
+    }
+  ]
 }
