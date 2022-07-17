@@ -1,11 +1,14 @@
 import React,{useState} from "react";
+import PopUp from "./PopUp";
+
 import {
   PencilIcon,
   SaveIcon,
+  TrashIcon
 
 } from "@heroicons/react/solid";
 
-function NotePage({updateNote, setAcitveNote, activeNote}) {
+function NotePage({updateNote, activeNote, deleteAll}) {
   const [readOnlyState, setReadOnlyState] = useState(false)
 
   const onEditFields = (field, value) =>{
@@ -19,11 +22,14 @@ function NotePage({updateNote, setAcitveNote, activeNote}) {
   return (
 
     <div className="">
-    <div className="all-notes relative z-0">
+    <div className="all-notes relative z-0 -mt-[20px]">
     <div className="note-page flex justify-center relative h-full">
-      <div className="notes-options flex ">
-        <PencilIcon className="w-10 md:w-12 absolute top-20 right-20 fill-slate-400 cursor-pointer" onClick={()=> setReadOnlyState(false)}/>
-        <SaveIcon className="w-10 md:w-12 absolute top-20 right-4 fill-slate-400 cursor-pointer" onClick={()=>setReadOnlyState(true)}/>
+
+      <div className="notes-options flex">
+        {/* <TrashIcon className="w-8 absolute top-20 md:right-[65%] right-[87%] fill-red-400 cursor-pointer" onClick={deleteAll}/> */}
+        <PopUp deleteAll={deleteAll} className=""/>
+        <PencilIcon className="w-8 absolute top-20 right-20 fill-yellow-400 cursor-pointer" onClick={()=> setReadOnlyState(false)}/>
+        <SaveIcon className="w-8 absolute top-20 right-7 fill-green-400 cursor-pointer" onClick={()=>setReadOnlyState(true)}/>
         <hr />
       </div>
       <div className="note-fields flex flex-col absolute top-32 md:left-[30%] left-0 right-0 h-[830px] md:h-[830px] overflow-hidden border-b border-t">
@@ -40,7 +46,7 @@ function NotePage({updateNote, setAcitveNote, activeNote}) {
       </div>
     </div>
     </div>
-    <div className="flex md:w-[70%] w-full justify-center mx-auto absolute bottom-8 md:left-[30%]  text-center "><p className="text-center text-orange-400 font-semibold">{new Date().toLocaleDateString()}</p></div>
+    <div className="flex md:w-[70%] w-full justify-center mx-auto absolute bottom-6 md:left-[30%]  text-center "><p className="text-center text-orange-400 font-semibold">{new Date().toLocaleDateString()}</p></div>
     </div>
     
   );

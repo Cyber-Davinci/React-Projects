@@ -3,16 +3,18 @@ import {
   PlayIcon,
   ChevronDoubleRightIcon,
   ChevronDoubleLeftIcon,
+  XCircleIcon
 } from "@heroicons/react/solid";
 
-function NoteSideBar({ notes, activeNote, addNote, setActiveNote }) {
+function NoteSideBar({ notes, activeNote, addNote, setActiveNote, deleteNote }) {
   const [toggleSideBar, setToggleSideBar] = useState(false);
+  const sortedNote = notes.sort((a,b)=> b.lastModified - a.lastModified)
   return (
     <>
       {!toggleSideBar ? (
         <div className=" w-full fixed cursor-pointer">
-          <ChevronDoubleRightIcon
-            className="w-8 md:w-12 md:invisible ml-4 mt-8 cursor-pointer animate-bounce fixed z-50 "
+          <ChevronDoubleLeftIcon
+            className="w-8 md:w-12 md:invisible ml-4 mt-4 cursor-pointer animate-bounce fixed z-50 "
             onClick={() => {
               setToggleSideBar(!toggleSideBar);
             }}
@@ -20,8 +22,8 @@ function NoteSideBar({ notes, activeNote, addNote, setActiveNote }) {
         </div>
       ) : (
         <div className=" w-full cursor-pointer">
-          <ChevronDoubleLeftIcon
-            className="w-8 md:w-12 md:invisible float-right  mr-4 mt-8 cursor-pointer animate-bounce fixed z-50"
+          <ChevronDoubleRightIcon
+            className="w-8 md:w-12 md:invisible float-right  mr-4 mt-4 cursor-pointer animate-bounce fixed z-50"
             onClick={() => {
               setToggleSideBar(!toggleSideBar);
             }}
@@ -46,6 +48,7 @@ function NoteSideBar({ notes, activeNote, addNote, setActiveNote }) {
                 type="text"
                 placeholder="quick search"
                 className="border w-11/12 text-xl p-2 rounded-xl text-center text-slate-900"
+                
               />
             </div>
             <div className="add-note mt-6">
@@ -58,21 +61,28 @@ function NoteSideBar({ notes, activeNote, addNote, setActiveNote }) {
 
           <div className="side-bar-notes flex flex-col justify-center mt-12">
             <div className="number-notes ml-16">
-              <p className="text-slate-500">quick notes (06)</p>
+              <p className="text-slate-500">quick notes ({notes.length})</p>
             </div>
-            {notes.map((note, i) => (
+            {sortedNote.map((note, i) => (
               <div 
-              className={`note flex border mt-2 mb-3 p-5 cursor-pointer rounded-3xl w-4/5 mx-auto  ${note.id === activeNote && "active: bg-sky-900"}`}
-               onClick={()=>setActiveNote(note.id)}
+              className={`note flex border mt-2 mb-3 p-5 cursor-pointer rounded-3xl w-4/5 mx-auto relative ${note.id === activeNote && "active: bg-sky-900"}`}
+               onClick={()=>{
+                setActiveNote(note.id)
+                setToggleSideBar(!toggleSideBar);
+              }}
                 key={i}
 
                 >
+                  <div className="absolute  right-3 top-2">
+                  <XCircleIcon className="w-6 hover:fill-red-400" onClick={()=>{deleteNote(note.id)}}/>
+                  </div>
 
                 <PlayIcon className={`w-10 float-left ${note.id === activeNote && "animate-pulse" }`} />
                 <div className="side-bar-note float-right pl-3">
                   <h3 className="title">{note.title}</h3>
                   <p>{note.content && note.content.substr(0, 75) + "..."}</p>
                   <p className=" text-orange-400">
+                  Last Modified{" "}
                     {new Date().toLocaleDateString("en-GB", {
                       hour: "2-digit",
                       minute: "2-digit",
